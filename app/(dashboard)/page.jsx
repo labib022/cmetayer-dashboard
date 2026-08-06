@@ -49,7 +49,7 @@ export default function DashboardHome() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-lg font-medium text-white">
-          Welcome back, {user?.full_name?.split(" ")[0]} 👋
+          Welcome back, {user?.full_name?.split(" ")[0]}
         </h1>
         <p className="text-sm text-neutral-400 mt-1">
           Here&apos;s what&apos;s happening with Cmetayer today.
