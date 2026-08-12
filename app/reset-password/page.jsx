@@ -9,6 +9,7 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
+  const resetToken = searchParams.get("reset_token") || "";
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,6 +26,11 @@ export default function ResetPasswordPage() {
       return;
     }
 
+    if (!resetToken) {
+      setError("Your reset session is missing or expired. Please verify your OTP again.");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -35,6 +41,7 @@ export default function ResetPasswordPage() {
         email,
         new_password: newPassword,
         confirm_password: confirmPassword,
+        reset_token: resetToken,
       }).unwrap();
       router.push("/login");
     } catch (err) {
@@ -55,7 +62,7 @@ export default function ResetPasswordPage() {
           <div className="relative z-10 flex flex-col items-center justify-center gap-3 py-14 px-6">
             <h1 className="text-3xl font-bold tracking-wide text-white">Hello Welcome!</h1>
             <p className="flex items-center gap-2 text-lg text-white/90">
-              
+
             </p>
           </div>
 
@@ -116,7 +123,7 @@ export default function ResetPasswordPage() {
 
           <Link
             href="/login"
-            className="block text-center text-sm text-neutral-500 hover:text-neutral-700 mt-5" 
+            className="block text-center text-sm text-neutral-500 hover:text-neutral-700 mt-5"
           >
             Back to sign in
           </Link>

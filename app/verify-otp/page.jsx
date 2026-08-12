@@ -30,8 +30,11 @@ export default function VerifyOtpPage() {
     }
 
     try {
-      await verifyOtp({ email, otp }).unwrap();
-      router.push(`/reset-password?email=${encodeURIComponent(email)}`);
+      const res = await verifyOtp({ email, otp }).unwrap();
+      const tokenParam = res?.reset_token
+        ? `&reset_token=${encodeURIComponent(res.reset_token)}`
+        : "";
+      router.push(`/reset-password?email=${encodeURIComponent(email)}${tokenParam}`);
     } catch (err) {
       setError(err?.data?.message || "Invalid or expired OTP");
     }
@@ -60,7 +63,7 @@ export default function VerifyOtpPage() {
 
           <div className="relative z-10 flex flex-col items-center justify-center gap-3 py-14 px-6">
             <h1 className="text-3xl font-bold tracking-wide text-white">Hello Welcome!</h1>
-      
+
           </div>
 
         </div>
