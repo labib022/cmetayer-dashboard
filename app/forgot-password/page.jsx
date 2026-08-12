@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_20%,white_0%,transparent_35%),radial-gradient(circle_at_80%_60%,white_0%,transparent_30%)]" />
 
           <div className="relative z-10 flex flex-col items-center justify-center gap-3 py-14 px-6">
-            <h1 className="text-3xl font-bold tracking-wide text-white"> Hello Welcome!</h1>
+            <h1 className="text-3xl font-bold tracking-wide text-white">Hello Welcome!</h1>
           </div>
 
         </div>
@@ -64,7 +64,7 @@ export default function ForgotPasswordPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Admin@gamil.com"
+                placeholder="admin@yourcompany.com"
                 required
                 className="w-full bg-white border border-neutral-300 rounded-md px-3 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               />

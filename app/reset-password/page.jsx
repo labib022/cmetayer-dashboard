@@ -61,9 +61,6 @@ export default function ResetPasswordPage() {
 
           <div className="relative z-10 flex flex-col items-center justify-center gap-3 py-14 px-6">
             <h1 className="text-3xl font-bold tracking-wide text-white">Hello Welcome!</h1>
-            <p className="flex items-center gap-2 text-lg text-white/90">
-
-            </p>
           </div>
 
         </div>

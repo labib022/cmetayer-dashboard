@@ -1,9 +1,11 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logout } from "@/lib/redux/features/auth/authSlice";
+import { useSignOutMutation } from "@/lib/redux/features/auth/authApi";
 import {
   LayoutDashboard,
   Calendar,
@@ -41,16 +43,25 @@ export default function Sidebar({ user }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    router.push("/login");
+  const [signOut, { isLoading: isLoggingOut }] = useSignOutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await signOut().unwrap();
+    } catch (err) {
+      // Backend call fail করলেও local session ঠিকভাবে clear করে বের করে দিচ্ছি —
+      // user যেন কখনোই "logout" চাপার পর dashboard-এ আটকে না থাকে
+      console.error("Sign out API error (proceeding with local cleanup):", err);
+    } finally {
+      dispatch(logout());
+      router.push("/login");
+    }
   };
 
   const linkClass = (href) =>
-    `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm ${
-      pathname === href
-        ? "bg-blue-500/10 text-blue-400"
-        : "text-neutral-400 hover:text-neutral-200"
+    `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm ${pathname === href
+      ? "bg-blue-500/10 text-blue-400"
+      : "text-neutral-400 hover:text-neutral-200"
     }`;
 
   return (
@@ -74,9 +85,8 @@ export default function Sidebar({ user }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`text-xs py-1 ${
-                pathname === item.href ? "text-blue-400" : "text-neutral-500 hover:text-neutral-300"
-              }`}
+              className={`text-xs py-1 ${pathname === item.href ? "text-blue-400" : "text-neutral-500 hover:text-neutral-300"
+                }`}
             >
               {item.label}
             </Link>
@@ -100,10 +110,11 @@ export default function Sidebar({ user }) {
         </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm text-neutral-400 hover:text-red-400"
+          disabled={isLoggingOut}
+          className="flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm text-neutral-400 hover:text-red-400 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           <LogOut size={16} />
-          Log out
+          {isLoggingOut ? "Logging out..." : "Log out"}
         </button>
       </div>
     </aside>
