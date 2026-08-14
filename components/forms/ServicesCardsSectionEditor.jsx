@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useGetCmsPageQuery, useSaveCmsPageMutation } from "@/lib/redux/features/cms/cmsApi";
+import ImageUploadField from "./ImageUploadField";
 
 const DEFAULTS = {
   label: "Our Services",
@@ -9,10 +10,10 @@ const DEFAULTS = {
   description:
     "Choose a service from the list below to get an instant quote or make a reservation immediately!",
   services: [
-    { title: "Moving & Packing", description: "Stress-free local and long-distance moving with professional packing." },
-    { title: "Home Cleaning", description: "Deep cleans, move-in/out, and recurring maid services." },
-    { title: "Handyman & Repair", description: "Plumbing, electrical, assembly, and general home repairs." },
-    { title: "Laundry & Dry Cleaning", description: "Wash & fold delivery service right to your doorstep." },
+    { title: "Moving & Packing", description: "Stress-free local and long-distance moving with professional packing.", image: "", icon: "" },
+    { title: "Home Cleaning", description: "Deep cleans, move-in/out, and recurring maid services.", image: "", icon: "" },
+    { title: "Handyman & Repair", description: "Plumbing, electrical, assembly, and general home repairs.", image: "", icon: "" },
+    { title: "Laundry & Dry Cleaning", description: "Wash & fold delivery service right to your doorstep.", image: "", icon: "" },
   ],
 };
 
@@ -29,14 +30,13 @@ export default function ServicesCardsSectionEditor() {
   useEffect(() => {
     const existing = data?.data?.[0]?.content;
     if (existing) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         label: existing.label ?? DEFAULTS.label,
         heading: existing.heading ?? DEFAULTS.heading,
         description: existing.description ?? DEFAULTS.description,
         services:
           Array.isArray(existing.services) && existing.services.length === 4
-            ? existing.services
+            ? existing.services.map((s, i) => ({ image: "", icon: "", ...DEFAULTS.services[i], ...s }))
             : DEFAULTS.services,
       });
     }
@@ -76,11 +76,10 @@ export default function ServicesCardsSectionEditor() {
     <div className="flex flex-col gap-6 max-w-2xl">
       {feedback && (
         <p
-          className={`text-sm px-3 py-2 rounded-md border ${
-            feedback.type === "success"
-              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
-              : "text-red-400 bg-red-500/10 border-red-500/20"
-          }`}
+          className={`text-sm px-3 py-2 rounded-md border ${feedback.type === "success"
+            ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+            : "text-red-400 bg-red-500/10 border-red-500/20"
+            }`}
         >
           {feedback.text}
         </p>
@@ -117,10 +116,22 @@ export default function ServicesCardsSectionEditor() {
       </div>
 
       <div className="flex flex-col gap-3">
-        <label className="text-sm font-medium text-neutral-300">Service Cards (images/icons stay fixed)</label>
+        <label className="text-sm font-medium text-neutral-300">Service Cards</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {form.services.map((s, i) => (
-            <div key={i} className="flex flex-col gap-2 border border-neutral-800 rounded-md p-3">
+            <div key={i} className="flex flex-col gap-3 border border-neutral-800 rounded-md p-3">
+              <ImageUploadField
+                label="Photo (optional — leave empty for default)"
+                value={s.image}
+                onChange={(url) => handleServiceChange(i, "image", url)}
+                placeholder="Default"
+              />
+              <ImageUploadField
+                label="Icon (optional — leave empty for default)"
+                value={s.icon}
+                onChange={(url) => handleServiceChange(i, "icon", url)}
+                placeholder="Default"
+              />
               <input
                 type="text"
                 value={s.title}

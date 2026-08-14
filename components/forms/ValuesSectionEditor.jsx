@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useGetCmsPageQuery, useSaveCmsPageMutation } from "@/lib/redux/features/cms/cmsApi";
+import ImageUploadField from "./ImageUploadField";
 
 const DEFAULTS = {
   label: "Our Values",
@@ -9,22 +10,10 @@ const DEFAULTS = {
   heading_line2: "EASY LIFT & CLEAN",
   description: "Our values guide how we work, clean, and care for every home we serve.",
   values: [
-    {
-      title: "Attention to Detail",
-      description: "We clean thoroughly, focusing on the small details that make a big difference.",
-    },
-    {
-      title: "Reliable Professionals",
-      description: "Our trained cleaners arrive on time and treat every home with care.",
-    },
-    {
-      title: "Safe & Eco-Friendly",
-      description: "We use safe cleaning products that are gentle on your family and the environment.",
-    },
-    {
-      title: "Customer-First Service",
-      description: "Your comfort and satisfaction are always our top priority.",
-    },
+    { title: "Attention to Detail", description: "We clean thoroughly, focusing on the small details that make a big difference.", icon: "" },
+    { title: "Reliable Professionals", description: "Our trained cleaners arrive on time and treat every home with care.", icon: "" },
+    { title: "Safe & Eco-Friendly", description: "We use safe cleaning products that are gentle on your family and the environment.", icon: "" },
+    { title: "Customer-First Service", description: "Your comfort and satisfaction are always our top priority.", icon: "" },
   ],
 };
 
@@ -41,7 +30,6 @@ export default function ValuesSectionEditor() {
   useEffect(() => {
     const existing = data?.data?.[0]?.content;
     if (existing) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         label: existing.label ?? DEFAULTS.label,
         heading_line1: existing.heading_line1 ?? DEFAULTS.heading_line1,
@@ -49,7 +37,7 @@ export default function ValuesSectionEditor() {
         description: existing.description ?? DEFAULTS.description,
         values:
           Array.isArray(existing.values) && existing.values.length === 4
-            ? existing.values
+            ? existing.values.map((v, i) => ({ icon: "", ...DEFAULTS.values[i], ...v }))
             : DEFAULTS.values,
       });
     }
@@ -89,17 +77,15 @@ export default function ValuesSectionEditor() {
     <div className="flex flex-col gap-6 max-w-2xl">
       {feedback && (
         <p
-          className={`text-sm px-3 py-2 rounded-md border ${
-            feedback.type === "success"
-              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
-              : "text-red-400 bg-red-500/10 border-red-500/20"
-          }`}
+          className={`text-sm px-3 py-2 rounded-md border ${feedback.type === "success"
+            ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+            : "text-red-400 bg-red-500/10 border-red-500/20"
+            }`}
         >
           {feedback.text}
         </p>
       )}
 
-      {/* Label */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-neutral-300">Small Label</label>
         <input
@@ -110,7 +96,6 @@ export default function ValuesSectionEditor() {
         />
       </div>
 
-      {/* Heading */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-neutral-300">Heading — Line 1</label>
@@ -132,7 +117,6 @@ export default function ValuesSectionEditor() {
         </div>
       </div>
 
-      {/* Description */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-neutral-300">Description</label>
         <textarea
@@ -143,12 +127,17 @@ export default function ValuesSectionEditor() {
         />
       </div>
 
-      {/* Value Cards */}
       <div className="flex flex-col gap-3">
-        <label className="text-sm font-medium text-neutral-300">Value Cards (icons stay fixed)</label>
+        <label className="text-sm font-medium text-neutral-300">Value Cards</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {form.values.map((v, i) => (
-            <div key={i} className="flex flex-col gap-2 border border-neutral-800 rounded-md p-3">
+            <div key={i} className="flex flex-col gap-3 border border-neutral-800 rounded-md p-3">
+              <ImageUploadField
+                label="Icon (optional — leave empty for default design icon)"
+                value={v.icon}
+                onChange={(url) => handleValueChange(i, "icon", url)}
+                placeholder="Default"
+              />
               <input
                 type="text"
                 value={v.title}
