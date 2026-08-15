@@ -29,6 +29,7 @@ const homeItems = [
   { href: "/pages/home/hero", label: "Hero" },
   { href: "/pages/home/values", label: "Values" },
   { href: "/pages/home/services", label: "Service Cards" },
+  { href: "/pages/home/clients", label: "Clients" },
 ];
 
 const serviceItems = [
@@ -68,15 +69,13 @@ export default function Sidebar({ user }) {
   };
 
   const linkClass = (href) =>
-    `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm ${
-      pathname === href
-        ? "bg-blue-500/10 text-blue-400"
-        : "text-neutral-400 hover:text-neutral-200"
+    `flex items-center gap-2.5 px-2.5 py-2 rounded-md text-sm ${pathname === href
+      ? "bg-blue-500/10 text-blue-400"
+      : "text-neutral-400 hover:text-neutral-200"
     }`;
 
   const subLinkClass = (href) =>
-    `text-xs py-1 ${
-      pathname === href ? "text-blue-400" : "text-neutral-500 hover:text-neutral-300"
+    `text-xs py-1 ${pathname === href ? "text-blue-400" : "text-neutral-500 hover:text-neutral-300"
     }`;
 
   return (
