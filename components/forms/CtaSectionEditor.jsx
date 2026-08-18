@@ -27,6 +27,7 @@ export default function CtaSectionEditor() {
   useEffect(() => {
     const existing = data?.data?.[0]?.content;
     if (existing) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setForm({
         label: existing.label ?? DEFAULTS.label,
         heading_part1: existing.heading_part1 ?? DEFAULTS.heading_part1,
