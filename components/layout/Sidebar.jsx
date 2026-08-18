@@ -31,6 +31,7 @@ const homeItems = [
   { href: "/pages/home/services", label: "Service Cards" },
   { href: "/pages/home/clients", label: "Clients" },
   { href: "/pages/home/faq", label: "FAQ Header" },
+  { href: "/pages/home/cta", label: "CTA" },
 ];
 
 const serviceItems = [
