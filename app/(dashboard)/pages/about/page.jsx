@@ -1,5 +1,5 @@
-import CmsPageEditor from "@/components/forms/CmsPageEditor";
+import { redirect } from "next/navigation";
 
-export default function AboutPageEditor() {
-  return <CmsPageEditor pageName="about_us" pageTitle="About page" />;
+export default function AboutPageIndex() {
+  redirect("/pages/about/hero");
 }
